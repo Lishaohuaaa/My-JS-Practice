@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            width: 8000px;
+            height: 8000px;
+        }
+
+        #box1 {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            position: absolute;
+        }
+
+        #box2 {
+            width: 100px;
+            height: 100px;
+            background-color: yellow;
+            position: absolute;
+            left: 200px;
+            top: 200px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+
+            /**
+             * 拖拽box1元素
+             *   - 拖拽的流程
+             *      1.当鼠标在被拖拽元素上被按下时，开始拖拽 onmousedown
+             *      2.当鼠标移动时，被拖拽元素跟随鼠标移动   onmousemove
+             *      3.当鼠标松开时，被拖拽元素固定在当前位置 onmouseup
+             */
+
+            //获取被拖拽元素即box1
+            var box1 = document.getElementById("box1");
+            var box1 = document.getElementById("box1");
+            var img1 = document.getElementById("img1");
+
+            //开启box1的拖拽
+            drag(box1);
+            drag(box2);
+            drag(img1);
+
+
+        };
+
+        /**
+         * 提取一个专门用来设置拖拽的函数
+         *   参数：开始拖拽的元素
+         */
+        function drag(obj) {
+            //1.当鼠标在被拖拽元素上被按下时，开始拖拽 onmousedown
+            obj.onmousedown = function (event) {
+                event = event || window.event;
+
+                //设置box1捕获所有鼠标按下的事件
+                /**
+                 * setCapture()
+                 *   - 只有IE支持，但是在火狐中调用不会报错
+                 *      而如果使用Chrome调用，会报错
+                 */
+                // if (box1.setCapture) {
+                //     box1.setCapture();
+                // }
+                //和上面的if判断语句含义一样
+                obj.setCapture && obj.setCapture();
+
+                //获取鼠标在盒子内的坐标，即div需要的偏移量
+                //  鼠标.clientX - 元素.offsetLeft
+                //  鼠标.clientY - 元素.offsetTop
+                var ol = event.clientX - obj.offsetLeft;
+                var ot = event.clientY - obj.offsetTop;
+
+                // console.log(ol + "," + ot);
+
+
+
+                //为document绑定一个onmousemove事件
+                document.onmousemove = function (event) {
+                    event = event || window.event;
+                    //2.当鼠标移动时，被拖拽元素跟随鼠标移动   onmousemove
+                    //获取鼠标坐标
+                    var left = event.clientX - ol;
+                    var top = event.clientY - ot;
+
+
+                    //获取滚动条滚动的距离
+                    // var st = document.documentElement.scrollTop;
+                    // var sl = document.documentElement.scrollLeft;
+
+                    //修改box1的位置
+                    obj.style.left = left + "px";
+                    obj.style.top = top + "px";
+
+                };
+
+                //为元素绑定一个鼠标松开事件
+                /**
+                 * 若给box1绑定，在别的div里松开鼠标，不会执行以下事件，因为不属于box1的事件
+                 *   而给document绑定，不管在哪里松开鼠标，都会触发
+                 */
+
+                document.onmouseup = function () {
+                    //3.当鼠标松开时，被拖拽元素固定在当前位置 onmouseup
+                    //取消document的onmousemove事件
+                    document.onmousemove = null;
+
+                    //取消document的onmouseup事件
+                    document.onmouseup = null;
+
+                    //当鼠标松开时，取消对事件的捕获
+                    obj.releaseCapture && obj.releaseCapture();
+                };
+
+                /**
+                 * 当我们拖拽一个网页中的内容时，浏览器会默认去搜索引擎中搜索内容
+                 *   此时会导致拖拽功能异常，这个是浏览器提供的默认行为，
+                 *   如果不希望发生这个行为，则可以通过return false来取消默认行为
+                 *     此方法不适用IE8 和 Chrome
+                 */
+                return false;
+            };
+        }
+    </script>
+</head>
+
+<body>
+    <span>我是一段文字</span>
+    <div id="box1"></div>
+    <div id="box2"></div>
+    <img src="images/1.jpg" alt="" id="img1" style="position: absolute;">
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #outer {
+            margin: 200px auto;
+            width: 270px;
+            height: 250px;
+            background-color: greenyellow;
+            padding: 10px 0;
+            /* 开启相对定位 */
+            position: relative;
+            /* overflow: hidden; */
+        }
+
+        #imgList {
+
+            list-style: none;
+            /* 设置ul的宽度 */
+            /* width: 1350px; */
+            /* 开启绝对定位 */
+            position: absolute;
+            left: 0;
+        }
+
+        #imgList li {
+            float: left;
+            margin: 0 10px;
+
+        }
+
+        img {
+            width: 250px;
+            height: 250px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            //设置imgList的宽度
+            var imgList = document.getElementById("imgList");
+            //获取页面中所有的img标签
+            imgList.style.width = 270 * imgArr.length + "px";
+
+            move(imgList,);
+        };
+        var imgArr = document.getElementsByTagName("img");
+
+
+        function move(obj, callback) {
+
+            clearInterval(obj.timer);
+
+            var current = parseInt(getStyle(obj, "left"));
+
+
+            obj.timer = setInterval(function () {
+
+                //设置图片向左移动
+                //获取box1的原来的left值
+                //parseInt()  把一个字符串中的合法数字取出来
+                var oldValue = parseInt(getStyle(obj, "left"));
+
+                //在旧值得基础上减少
+                var newValue = oldValue - 10;
+
+                //判断newValue是否大于270 * imgArr.length
+                if (newValue < - (270 * (imgArr.length - 1))) {
+                    newValue = 0;
+                };
+                //将新值设置给box1
+                obj.style.left = newValue + "px";
+
+                // 当元素移动到800px时，使其停止运行动画
+                if ((newValue - current) === -270) {
+                    clearInterval(obj.timer);
+                    callback && callback();
+                };
+            }, 30);
+        };
+        function getStyle(obj, name) {
+
+            //不加window，全局差找不到getComputedStyle，则会报错，则IE8差找不到，会报错而不是执行else
+            //加上window属性，在window中找不到getComputedStyle，会返回undefined
+            // if (window.getComputedStyle) {
+            //     //正常浏览器的方式,具有getComputedStyle方法
+            //     return getComputedStyle(obj, null)[name];
+            // } else {
+            //     //IE8及以下的方式，没有getComputedStyle方法
+            //     return obj.currentStyle[name];
+            // }
+
+            return window.getComputedStyle ? getComputedStyle(obj, null)[name] : obj.currentStyle[name];
+        };
+    </script>
+</head>
+
+<body>
+    <!-- 创建一个外部的div，来作为大的容器 -->
+    <div id="outer">
+        <!-- 创建一个ul，用于放置图片 -->
+        <ul id="imgList">
+            <li><img src="images/1.jpg" alt=""></li>
+            <li><img src="images/2.jpg" alt=""></li>
+            <li><img src="images/3.jpg" alt=""></li>
+            <li><img src="images/4.jpg" alt=""></li>
+            <li><img src="images/5.jpg" alt=""></li>
+        </ul>
+    </div>
+</body>
+
+</html>

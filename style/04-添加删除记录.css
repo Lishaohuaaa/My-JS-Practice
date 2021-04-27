@@ -1,0 +1,39 @@
+
+#employeeTable {
+    margin: 50px auto;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+
+#employeeTable th,
+#employeeTable td {
+    width: 130px;
+    height: 40px;
+    border: 1px solid #000;
+}
+a {
+    color: #0000ee;
+}
+#formDiv {
+    width: 380px;
+    height: 240px;
+    margin: 50px auto;
+    border: 1px solid #000;
+    padding-left: 20px;
+    font-size: 20px;
+}
+
+#formDiv table {
+    width: 350px;
+    text-align: center;
+}
+
+input {
+    width: 200px;
+}
+
+button {
+    width: 80px;
+    height: 30px;
+}

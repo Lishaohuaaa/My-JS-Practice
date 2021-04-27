@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        window.onload = function () {
+
+            /**
+             * 使图片可以自动切换
+             */
+
+            //获取img标签
+            var img1 = document.getElementById("img1");
+            var btn01 = document.getElementById("btn01");
+
+            //创建一个数组来保存图片的路径
+            var imgArr = ["images/1.jpg", "images/2.jpg", "images/3.jpg", "images/4.jpg", "images/5.jpg"]
+            //定义一个变量，用来保存定时器的标识
+            var timer;
+
+            //创建一个变量，用来保存当前图片的索引
+            var index = 0;
+            btn01.onclick = function () {
+
+                /**
+                 * 目前，我们每点击一次按钮，就会开启一个定时器，
+                 *   点击多次就会开启多个定时器，这就导致图片的切换速度过快
+                 *   并且我们只能关闭最后一次开启的定时器
+                 */
+
+                //在开启定时器之前，需要将当前元素上的其他定时器关闭
+                clearInterval(timer);
+
+                /**
+                 * 开启一个定时器，来自动切换图片
+                 */
+                timer = setInterval(function () {
+
+
+
+                    index++;
+
+                    // if (index >= imgArr.length) {
+                    //     //clearInterval()可以用来关闭一个浏览器
+                    //     //方法中需要一个定时器的表示作为参数，这样关闭标识对应的定时器
+                    //     index = 0;
+                    // }
+
+                    //使用模，即取余，1%5=1，2%5=2，...5%5=0,6%5=1
+                    // index = index % imgArr.length;
+                    //和上面的相同
+                    index %= imgArr.length;
+
+                    img1.src = imgArr[index];
+
+                }, 1000);
+            };
+
+            var btn02 = document.getElementById("btn02");
+            btn02.onclick = function () {
+                //点击按钮以后，停止图片的自动切换，关闭计时器
+                /**
+                 * clearInterval()可以接收任意参数，
+                 *   如果参数是一个有效的定时器的标识，则停止对应的定时器
+                 *   如果参数不是一个有效的标识，则什么也不做，也不会报错
+                 */
+                clearInterval(timer);
+            };
+
+        };
+    </script>
+</head>
+
+<body>
+    <img id="img1" src="images/1.jpg" alt="" style="height: 150px;">
+    <br>
+    <button id="btn01">开始</button>
+    <button id="btn02">停止</button>
+</body>
+
+</html>
